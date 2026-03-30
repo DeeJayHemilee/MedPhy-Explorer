@@ -20,14 +20,21 @@ The website aims to bridge the gap between complex physics concepts and their pr
 
 ## 📁 Project Structure
 medical-physics-website/
+
 │
 ├── index.html # Home Page - Introduction to Medical Physics
+
 ├── principles.html # Core Principles Page - Physics Concepts
+
 ├── applications.html # Applications Page - Clinical Impact
+
 ├── README.md # Documentation (this file)
+
 │
 └── assets/ # (Optional) Additional resources
+
 ├── images/ # Image assets
+
 └── models/ # 3D model files
 
 
