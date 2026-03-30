@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedPhysExplorer | Core Principles - Medical Physics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.128.0/build/three.module.js"
+            }
+        }
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0B1E33;
+            color: #FFFFFF;
+            overflow-x: hidden;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1A2A3A;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2A7DE1;
+            border-radius: 4px;
+        }
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(11, 30, 51, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(42, 125, 225, 0.3);
+        }
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #2A7DE1, #20C9B0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        .nav-links a {
+            color: #E0E7FF;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: #2A7DE1;
+        }
+
+        /* Hero Section */
+        .principles-hero {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(135deg, #0B1E33, #1A2A3A);
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px;
+        }
+        .principles-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(42,125,225,0.1)" stroke-width="2"/><circle cx="50" cy="50" r="30" fill="none" stroke="rgba(32,201,176,0.1)" stroke-width="2"/><circle cx="50" cy="50" r="20" fill="none" stroke="rgba(139,92,246,0.1)" stroke-width="2"/></svg>') repeat;
+            opacity: 0.3;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #2A7DE1, #20C9B0, #8B5CF6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-content p {
+            color: #B0C4DE;
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        .module {
+            max-width: 1400px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+        .module-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid #2A7DE1;
+            padding-left: 1rem;
+        }
+        .module-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            background: rgba(37, 53, 68, 0.4);
+            border-radius: 24px;
+            padding: 2rem;
+            backdrop-filter: blur(5px);
+        }
+        .viz-canvas {
+            width: 100%;
+            height: 400px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 16px;
+        }
+        .explanation {
+            padding: 1rem;
+        }
+        .explanation h3 {
+            color: #2A7DE1;
+            margin-bottom: 1rem;
+        }
+        .explanation p {
+            color: #B0C4DE;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        .slider-control {
+            margin: 1rem 0;
+        }
+        .slider-control label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #20C9B0;
+        }
+        input[type="range"] {
+            width: 100%;
+            height: 4px;
+            background: #2A7DE1;
+            border-radius: 2px;
+            -webkit-appearance: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #20C9B0;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+        .value-display {
+            color: #8B5CF6;
+            font-weight: bold;
+        }
+        .tooltip-demo {
+            background: rgba(42,125,225,0.2);
+            padding: 0.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            cursor: help;
+            border-bottom: 1px dashed #2A7DE1;
+        }
+        .quiz-box {
+            background: rgba(0,0,0,0.4);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        .quiz-box h4 {
+            color: #20C9B0;
+            margin-bottom: 1rem;
+        }
+        .quiz-question {
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        .quiz-option {
+            display: block;
+            margin: 0.5rem 0;
+            padding: 0.8rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+        .quiz-option:hover {
+            background: rgba(42,125,225,0.3);
+            transform: translateX(5px);
+        }
+        .quiz-option.selected {
+            background: rgba(32,201,176,0.3);
+            border-left: 3px solid #20C9B0;
+        }
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 0.8rem;
+            border-radius: 8px;
+            display: none;
+        }
+        .quiz-feedback.correct {
+            display: block;
+            background: rgba(74,222,128,0.2);
+            color: #4ADE80;
+            border-left: 3px solid #4ADE80;
+        }
+        .quiz-feedback.incorrect {
+            display: block;
+            background: rgba(239,68,68,0.2);
+            color: #ef4444;
+            border-left: 3px solid #ef4444;
+        }
+        .quiz-impact {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: #8B5CF6;
+            display: none;
+        }
+        .quiz-impact.show {
+            display: block;
+        }
+        .next-question-btn {
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: #2A7DE1;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .next-question-btn:hover {
+            background: #20C9B0;
+        }
+        .footer {
+            background: #061525;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        @media (max-width: 768px) {
+            .module-content {
+                grid-template-columns: 1fr;
+            }
+            .nav-links {
+                display: none;
+            }
+            .principles-hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">⚛️ MedPhysExplorer</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="principles.html" class="active">Core Principles</a></li>
+                <li><a href="applications.html">Applications</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="principles-hero">
+        <div class="hero-content">
+            <h1>Core <span class="gradient-text">Principles</span></h1>
+            <p>Explore the fundamental physics concepts that make modern medicine possible — from the quantum world of X-rays to the magnetic resonance that reveals our inner selves.</p>
+        </div>
+    </div>
+
+    <!-- X-ray Module -->
+    <div class="module" id="xray">
+        <h2 class="module-title">🔬 X-ray Physics</h2>
+        <div class="module-content">
+            <div>
+                <canvas id="xrayCanvas" class="viz-canvas"></canvas>
+                <div class="slider-control">
+                    <label>⚡ Peak Voltage (kVp): <span id="kvpValue" class="value-display">80</span> kV</label>
+                    <input type="range" id="kvpSlider" min="40" max="150" value="80">
+                    <div class="slider-labels" style="display: flex; justify-content: space-between; margin-top: 0.3rem;">
+                        <span style="font-size: 0.7rem;">Lower energy</span>
+                        <span style="font-size: 0.7rem;">Higher energy (better penetration)</span>
+                    </div>
+                </div>
+                <div class="slider-control">
+                    <label>📊 Tube Current (mA): <span id="maValue" class="value-display">200</span> mA</label>
+                    <input type="range" id="maSlider" min="10" max="500" value="200">
+                    <div class="slider-labels" style="display: flex; justify-content: space-between; margin-top: 0.3rem;">
+                        <span style="font-size: 0.7rem;">Fewer X-rays</span>
+                        <span style="font-size: 0.7rem;">More X-rays (better image)</span>
+                    </div>
+                </div>
+            </div>
+            <div class="explanation">
+                <h3>How X-rays are Produced</h3>
+                <p>Electrons are emitted from the cathode and accelerated toward the anode by high voltage. When they strike the tungsten target, X-rays are produced through <strong>bremsstrahlung</strong> (braking radiation) and <strong>characteristic radiation</strong>.</p>
+                <p><strong>The Physics:</strong> The maximum X-ray energy equals the electron kinetic energy (E = eV, where e is electron charge, V is voltage). Higher kVp produces more penetrating X-rays with shorter wavelength.</p>
+                <div class="tooltip-demo" title="Bremsstrahlung means 'braking radiation' - electrons decelerate when hitting the target, releasing energy as X-rays. This accounts for ~80% of X-ray production.">ℹ️ What is Bremsstrahlung?</div>
+                
+                <div class="quiz-box" id="xrayQuiz">
+                    <h4>📝 Knowledge Check</h4>
+                    <div id="xrayQuizContainer">
+                        <!-- Questions will be injected here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MRI Module -->
+    <div class="module" id="mri">
+        <h2 class="module-title">🧲 MRI Physics</h2>
+        <div class="module-content">
+            <div>
+                <canvas id="mriCanvas" class="viz-canvas"></canvas>
+                <div class="slider-control">
+                    <label>🧲 Magnetic Field (Tesla): <span id="fieldValue" class="value-display">1.5</span> T</label>
+                    <input type="range" id="fieldSlider" min="0.5" max="7" step="0.1" value="1.5">
+                    <div class="slider-labels" style="display: flex; justify-content: space-between; margin-top: 0.3rem;">
+                        <span style="font-size: 0.7rem;">Lower field (0.5T)</span>
+                        <span style="font-size: 0.7rem;">Higher field (7T research)</span>
+                    </div>
+                </div>
+                <button id="rfPulseBtn" style="margin-top: 1rem; padding: 0.6rem 1rem; background: #2A7DE1; border: none; border-radius: 8px; color: white; cursor: pointer; transition: all 0.3s;">📡 Apply RF Pulse (90° flip)</button>
+                <p style="margin-top: 0.5rem; font-size: 0.8rem; color: #8B5CF6;">💡 RF pulse flips protons to higher energy state</p>
+            </div>
+            <div class="explanation">
+                <h3>Nuclear Magnetic Resonance</h3>
+                <p>Hydrogen protons (with spin ½) align with the external magnetic field. Radiofrequency pulses at the Larmor frequency flip their spin, and as they relax back, they emit signals used to create detailed images.</p>
+                <p><strong>The Physics:</strong> Larmor equation: ω = γB₀, where γ is gyromagnetic ratio (42.58 MHz/T for hydrogen). Higher field = higher frequency = better signal-to-noise ratio.</p>
+                <div class="tooltip-demo" title="The Larmor frequency determines the resonance condition. For 1.5T, hydrogen precesses at ~63.87 MHz. The RF pulse must match this frequency to flip spins.">ℹ️ What is Larmor Frequency?</div>
+                
+                <div class="quiz-box" id="mriQuiz">
+                    <h4>📝 Knowledge Check</h4>
+                    <div id="mriQuizContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Radiation Therapy Module -->
+    <div class="module" id="therapy">
+        <h2 class="module-title">☢️ Radiation Therapy</h2>
+        <div class="module-content">
+            <div>
+                <canvas id="therapyCanvas" class="viz-canvas"></canvas>
+                <div class="slider-control">
+                    <label>🎯 Beam Energy (MV): <span id="beamValue" class="value-display">6</span> MV</label>
+                    <input type="range" id="beamSlider" min="4" max="18" value="6">
+                    <div class="slider-labels" style="display: flex; justify-content: space-between; margin-top: 0.3rem;">
+                        <span style="font-size: 0.7rem;">4 MV (shallow)</span>
+                        <span style="font-size: 0.7rem;">18 MV (deep tumors)</span>
+                    </div>
+                </div>
+                <p style="margin-top: 0.5rem; font-size: 0.8rem; color: #20C9B0;">💡 Higher energy = deeper penetration (d_max shifts from ~1.5cm to ~3.5cm)</p>
+            </div>
+            <div class="explanation">
+                <h3>Linear Accelerator (LINAC)</h3>
+                <p>High-energy X-rays (photons) or electrons are directed at tumors with millimeter precision. The dose distribution follows a characteristic curve with build-up region, then exponential attenuation.</p>
+                <p><strong>The Physics:</strong> Photon interactions: Photoelectric effect (low energy), Compton scattering (diagnostic range), Pair production (high energy >1.022 MeV). Percentage Depth Dose (PDD) describes energy deposition with depth.</p>
+                <div class="tooltip-demo" title="IMRT uses many small beams with varying intensities to shape the dose precisely to the tumor while sparing surrounding organs at risk.">ℹ️ What is IMRT?</div>
+                
+                <div class="quiz-box" id="therapyQuiz">
+                    <h4>📝 Knowledge Check</h4>
+                    <div id="therapyQuizContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>⚛️ MedPhysExplorer | Understanding the physics behind modern medicine</p>
+    </footer>
+
+    <script type="module">
+        import * as THREE from 'three';
+        
+        // ========== X-RAY VISUALIZATION ==========
+        const xrayCanvas = document.getElementById('xrayCanvas');
+        const xrayScene = new THREE.Scene();
+        xrayScene.background = new THREE.Color(0x0F2A3A);
+        const xrayCamera = new THREE.PerspectiveCamera(45, xrayCanvas.clientWidth / xrayCanvas.clientHeight, 0.1, 1000);
+        xrayCamera.position.set(0, 1.5, 6);
+        xrayCamera.lookAt(0, 0, 0);
+        const xrayRenderer = new THREE.WebGLRenderer({ canvas: xrayCanvas, antialias: true });
+        
+        function resizeXray() {
+            const w = xrayCanvas.clientWidth;
+            const h = xrayCanvas.clientHeight;
+            xrayRenderer.setSize(w, h);
+            xrayCamera.aspect = w / h;
+            xrayCamera.updateProjectionMatrix();
+        }
+        resizeXray();
+        window.addEventListener('resize', resizeXray);
+        
+        // Cathode (filament)
+        const cathodeGeo = new THREE.CylinderGeometry(0.5, 0.5, 0.6, 32);
+        const cathodeMat = new THREE.MeshStandardMaterial({ color: 0xCC8866, metalness: 0.9, emissive: 0x442200 });
+        const cathode = new THREE.Mesh(cathodeGeo, cathodeMat);
+        cathode.position.set(-2, 0, 0);
+        xrayScene.add(cathode);
+        
+        // Anode (target)
+        const anodeGeo = new THREE.CylinderGeometry(0.7, 0.8, 0.8, 32);
+        const anodeMat = new THREE.MeshStandardMaterial({ color: 0xDDAA77, metalness: 0.9, emissive: 0x442200 });
+        const anode = new THREE.Mesh(anodeGeo, anodeMat);
+        anode.position.set(2, 0, 0);
+        anode.rotation.z = Math.PI / 2;
+        xrayScene.add(anode);
+        
+        // Electron particles
+        const electronParticles = [];
+        for (let i = 0; i < 40; i++) {
+            const particleGeo = new THREE.SphereGeometry(0.06, 16, 16);
+            const particleMat = new THREE.MeshStandardMaterial({ color: 0x2A7DE1, emissive: 0x2A7DE1, emissiveIntensity: 0.5 });
+            const particle = new THREE.Mesh(particleGeo, particleMat);
+            xrayScene.add(particle);
+            electronParticles.push(particle);
+        }
+        
+        // X-ray emission particles
+        const xrayParticles = [];
+        for (let i = 0; i < 60; i++) {
+            const particleGeo = new THREE.SphereGeometry(0.05, 8, 8);
+            const particleMat = new THREE.MeshStandardMaterial({ color: 0xFFAA55, emissive: 0xFF5500 });
+            const particle = new THREE.Mesh(particleGeo, particleMat);
+            xrayScene.add(particle);
+            xrayParticles.push(particle);
+        }
+        
+        // Add tungsten target glow
+        const targetGlow = new THREE.PointLight(0xFF6600, 0.5, 3);
+        targetGlow.position.set(2, 0, 0);
+        xrayScene.add(targetGlow);
+        
+        // Lights
+        const ambient = new THREE.AmbientLight(0x404060);
+        xrayScene.add(ambient);
+        const light = new THREE.DirectionalLight(0xffffff, 1);
+        light.position.set(1, 2, 3);
+        xrayScene.add(light);
+        
+        let kvp = 80;
+        let ma = 200;
+        let particleTime = 0;
+        
+        document.getElementById('kvpSlider').addEventListener('input', (e) => {
+            kvp = parseInt(e.target.value);
+            document.getElementById('kvpValue').textContent = kvp;
+            targetGlow.intensity = 0.3 + (kvp / 150) * 0.5;
+        });
+        document.getElementById('maSlider').addEventListener('input', (e) => {
+            ma = parseInt(e.target.value);
+            document.getElementById('maValue').textContent = ma;
+        });
+        
+        function animateXray() {
+            requestAnimationFrame(animateXray);
+            particleTime += 0.03;
+            
+            const intensity = ma / 500;
+            const speedFactor = kvp / 100;
+            
+            // Animate electrons (cathode to anode)
+            electronParticles.forEach((p, idx) => {
+                let t = (particleTime * 2 * speedFactor + idx * 0.1) % 1;
+                p.position.x = -1.7 + t * 3.4;
+                p.position.y = Math.sin(particleTime * 8 + idx) * 0.2;
+                p.position.z = Math.cos(particleTime * 6 + idx) * 0.2;
+                p.scale.setScalar(0.4 + intensity * 0.8);
+                p.material.emissiveIntensity = 0.3 + intensity * 0.7;
+            });
+            
+            // Animate X-ray emission (from anode)
+            const xrayIntensity = (kvp / 150) * (ma / 500);
+            xrayParticles.forEach((p, idx) => {
+                const angle = (particleTime * 3 + idx) % (Math.PI * 2);
+                const radius = 0.5 + Math.random() * 1.5;
+                p.position.x = 2 + Math.cos(angle) * radius;
+                p.position.y = Math.sin(angle * 2) * 0.5;
+                p.position.z = Math.sin(angle) * 0.5;
+                p.scale.setScalar(0.2 + xrayIntensity * 1.5);
+                p.material.emissiveIntensity = 0.3 + xrayIntensity * 1.2;
+            });
+            
+            // Rotate anode slightly
+            anode.rotation.y += 0.02;
+            cathode.rotation.y += 0.01;
+            
+            xrayRenderer.render(xrayScene, xrayCamera);
+        }
+        animateXray();
+        
+        // ========== MRI VISUALIZATION ==========
+        const mriCanvas = document.getElementById('mriCanvas');
+        const mriScene = new THREE.Scene();
+        mriScene.background = new THREE.Color(0x0F2A3A);
+        const mriCamera = new THREE.PerspectiveCamera(45, mriCanvas.clientWidth / mriCanvas.clientHeight, 0.1, 1000);
+        mriCamera.position.set(0, 1.5, 7);
+        const mriRenderer = new THREE.WebGLRenderer({ canvas: mriCanvas, antialias: true });
+        
+        function resizeMRI() {
+            const w = mriCanvas.clientWidth;
+            const h = mriCanvas.clientHeight;
+            mriRenderer.setSize(w, h);
+            mriCamera.aspect = w / h;
+            mriCamera.updateProjectionMatrix();
+        }
+        resizeMRI();
+        window.addEventListener('resize', resizeMRI);
+        
+        // MRI Scanner Ring
+        const ringGeo = new THREE.TorusGeometry(2, 0.2, 64, 128);
+        const ringMat = new THREE.MeshStandardMaterial({ color: 0x2A7DE1, metalness: 0.8 });
+        const ring = new THREE.Mesh(ringGeo, ringMat);
+        ring.rotation.x = Math.PI / 2;
+        mriScene.add(ring);
+        
+        const ring2 = new THREE.Mesh(ringGeo, ringMat);
+        ring2.rotation.x = Math.PI / 2;
+        ring2.position.z = 1;
+        ring2.scale.set(1.1, 1.1, 0.8);
+        mriScene.add(ring2);
+        
+        // Hydrogen protons
+        const protons = [];
+        for (let i = 0; i < 40; i++) {
+            const protonGeo = new THREE.SphereGeometry(0.12, 24, 24);
+            const protonMat = new THREE.MeshStandardMaterial({ color: 0x2A7DE1, emissive: 0x1A4D8C });
+            const proton = new THREE.Mesh(protonGeo, protonMat);
+            proton.position.x = (Math.random() - 0.5) * 3;
+            proton.position.y = (Math.random() - 0.5) * 2;
+            proton.position.z = (Math.random() - 0.5) * 2;
+            mriScene.add(proton);
+            protons.push({ mesh: proton, angle: Math.random() * Math.PI * 2, speed: 0.01 + Math.random() * 0.02, originalY: proton.position.y });
+        }
+        
+        // Magnetic field lines
+        const fieldPoints = [];
+        for (let z = -3; z <= 3; z += 0.1) {
+            fieldPoints.push(new THREE.Vector3(0, 0, z));
+        }
+        const fieldGeo = new THREE.BufferGeometry().setFromPoints(fieldPoints);
+        const fieldMat = new THREE.LineBasicMaterial({ color: 0x20C9B0, transparent: true, opacity: 0.4 });
+        const fieldLine = new THREE.Line(fieldGeo, fieldMat);
+        mriScene.add(fieldLine);
+        
+        // Add more field lines
+        for (let x = -1; x <= 1; x += 1) {
+            const points = [];
+            for (let z = -3; z <= 3; z += 0.1) {
+                points.push(new THREE.Vector3(x, 0, z));
+            }
+            const geo = new THREE.BufferGeometry().setFromPoints(points);
+            const line = new THREE.Line(geo, fieldMat);
+            mriScene.add(line);
+        }
+        
+        const mriLight = new THREE.AmbientLight(0x404060);
+        mriScene.add(mriLight);
+        const mriDirLight = new THREE.DirectionalLight(0xffffff, 1);
+        mriDirLight.position.set(1, 2, 3);
+        mriScene.add(mriDirLight);
+        
+        let rfActive = false;
+        let rfTime = 0;
+        let fieldStrength = 1.5;
+        
+        document.getElementById('rfPulseBtn').addEventListener('click', () => {
+            rfActive = true;
+            rfTime = 0;
+            document.getElementById('rfPulseBtn').style.background = '#20C9B0';
+            setTimeout(() => {
+                document.getElementById('rfPulseBtn').style.background = '#2A7DE1';
+            }, 500);
+        });
+        document.getElementById('fieldSlider').addEventListener('input', (e) => {
+            fieldStrength = parseFloat(e.target.value);
+            document.getElementById('fieldValue').textContent = fieldStrength;
+            // Update proton precession speed
+            protons.forEach(p => {
+                p.speed = 0.01 + fieldStrength * 0.02;
+            });
+        });
+        
+        function animateMRI() {
+            requestAnimationFrame(animateMRI);
+            
+            if (rfActive) {
+                rfTime += 0.05;
+                if (rfTime > 0.8) {
+                    rfActive = false;
+                }
+            }
+            
+            ring.rotation.z += 0.01;
+            ring2.rotation.z += 0.008;
+            
+            protons.forEach(proton => {
+                if (rfActive) {
+                    // RF pulse causes spin flip - move protons up
+                    proton.mesh.position.y += 0.08;
+                    proton.mesh.material.emissiveIntensity = 0.8;
+                    if (proton.mesh.position.y > 1.8) {
+                        proton.mesh.position.y = -1.5;
+                    }
+                } else {
+                    // Precession around field lines
+                    proton.angle += proton.speed;
+                    const radius = 0.6;
+                    proton.mesh.position.x = Math.sin(proton.angle) * radius;
+                    proton.mesh.position.z = Math.cos(proton.angle) * radius;
+                    proton.mesh.material.emissiveIntensity = 0.2;
+                }
+                proton.mesh.rotation.x += 0.05;
+                proton.mesh.rotation.y += 0.03;
+            });
+            
+            mriRenderer.render(mriScene, mriCamera);
+        }
+        animateMRI();
+        
+        // ========== THERAPY VISUALIZATION (Fixed Slider Effect) ==========
+        const therapyCanvas = document.getElementById('therapyCanvas');
+        const therapyScene = new THREE.Scene();
+        therapyScene.background = new THREE.Color(0x0F2A3A);
+        const therapyCamera = new THREE.PerspectiveCamera(45, therapyCanvas.clientWidth / therapyCanvas.clientHeight, 0.1, 1000);
+        therapyCamera.position.set(0, 1.5, 6);
+        const therapyRenderer = new THREE.WebGLRenderer({ canvas: therapyCanvas, antialias: true });
+        
+        function resizeTherapy() {
+            const w = therapyCanvas.clientWidth;
+            const h = therapyCanvas.clientHeight;
+            therapyRenderer.setSize(w, h);
+            therapyCamera.aspect = w / h;
+            therapyCamera.updateProjectionMatrix();
+        }
+        resizeTherapy();
+        window.addEventListener('resize', resizeTherapy);
+        
+        // Tumor (target)
+        const tumorGeo = new THREE.SphereGeometry(0.7, 64, 64);
+        const tumorMat = new THREE.MeshStandardMaterial({ color: 0xef4444, emissive: 0x440000 });
+        const tumor = new THREE.Mesh(tumorGeo, tumorMat);
+        tumor.position.set(0, 0, 0);
+        therapyScene.add(tumor);
+        
+        // Healthy tissue surrounding
+        const healthyGeo = new THREE.SphereGeometry(1.3, 64, 64);
+        const healthyMat = new THREE.MeshStandardMaterial({ color: 0x4A6A8A, transparent: true, opacity: 0.3 });
+        const healthyTissue = new THREE.Mesh(healthyGeo, healthyMat);
+        therapyScene.add(healthyTissue);
+        
+        // Beam visualization particles
+        const beamParticles = [];
+        for (let i = 0; i < 100; i++) {
+            const particleGeo = new THREE.SphereGeometry(0.06, 8, 8);
+            const particleMat = new THREE.MeshStandardMaterial({ color: 0x2A7DE1 });
+            const particle = new THREE.Mesh(particleGeo, particleMat);
+            therapyScene.add(particle);
+            beamParticles.push(particle);
+        }
+        
+        // Beam direction indicators
+        const beamArrows = [];
+        const angles = [-0.6, -0.3, 0, 0.3, 0.6];
+        angles.forEach(angle => {
+            const arrowGeo = new THREE.CylinderGeometry(0.08, 0.12, 1.5, 8);
+            const arrowMat = new THREE.MeshStandardMaterial({ color: 0x2A7DE1 });
+            const arrow = new THREE.Mesh(arrowGeo, arrowMat);
+            arrow.position.set(angle * 1.2, 0.2, -2.5);
+            arrow.rotation.x = 0.2;
+            therapyScene.add(arrow);
+            beamArrows.push(arrow);
+        });
+        
+        const therapyLight = new THREE.AmbientLight(0x404060);
+        therapyScene.add(therapyLight);
+        const therapyDirLight = new THREE.DirectionalLight(0xffffff, 1);
+        therapyDirLight.position.set(1, 2, 3);
+        therapyScene.add(therapyDirLight);
+        
+        let beamEnergy = 6;
+        let beamTime = 0;
+        
+        document.getElementById('beamSlider').addEventListener('input', (e) => {
+            beamEnergy = parseInt(e.target.value);
+            document.getElementById('beamValue').textContent = beamEnergy;
+            
+            // Visual feedback based on energy
+            const intensity = (beamEnergy - 4) / 14;
+            tumorMat.emissiveIntensity = 0.2 + intensity * 0.8;
+            
+            // Update beam arrow colors
+            beamArrows.forEach(arrow => {
+                arrow.material.color.setHex(0x2A7DE1);
+                if (beamEnergy > 12) arrow.material.color.setHex(0x20C9B0);
+                if (beamEnergy > 15) arrow.material.color.setHex(0x8B5CF6);
+            });
+        });
+        
+        function animateTherapy() {
+            requestAnimationFrame(animateTherapy);
+            beamTime += 0.05;
+            
+            // Animate beam particles flowing toward tumor
+            const intensity = (beamEnergy - 4) / 14;
+            beamParticles.forEach((particle, idx) => {
+                const t = (beamTime * 1.5 + idx * 0.05) % 1;
+                const angleOffset = Math.sin(idx) * 0.5;
+                particle.position.x = Math.sin(beamTime * 2 + idx) * (0.5 + intensity * 0.8);
+                particle.position.z = -3 + t * 6;
+                particle.position.y = Math.cos(beamTime * 1.5 + idx) * 0.3;
+                particle.scale.setScalar(0.2 + intensity * 0.8);
+                particle.material.color.setHex(intensity > 0.5 ? 0x20C9B0 : 0x2A7DE1);
+            });
+            
+            // Animate tumor pulsation based on beam energy
+            const pulse = 1 + Math.sin(beamTime * 8) * (0.02 + intensity * 0.05);
+            tumor.scale.set(pulse, pulse, pulse);
+            
+            // Rotate healthy tissue
+            healthyTissue.rotation.y += 0.005;
+            
+            therapyRenderer.render(therapyScene, therapyCamera);
+        }
+        animateTherapy();
+        
+        // ========== QUIZ SYSTEM (Multiple Questions per Module) ==========
+        
+        // X-ray Quiz Questions
+        const xrayQuestions = [
+            {
+                text: "What determines the maximum energy of X-rays produced?",
+                options: [
+                    { text: "Tube current (mA)", impact: "mA affects the quantity (number) of X-rays, not their maximum energy. Higher mA = more X-rays, but same energy spectrum." },
+                    { text: "Peak voltage (kVp)", impact: "✅ Correct! kVp determines the maximum kinetic energy of electrons (E = eV), which equals the maximum X-ray photon energy." },
+                    { text: "Anode material", impact: "Anode material affects efficiency and characteristic X-ray energies, but kVp determines the maximum energy." }
+                ],
+                correct: 1
+            },
+            {
+                text: "What physical process produces ~80% of X-rays in a diagnostic tube?",
+                options: [
+                    { text: "Photoelectric effect", impact: "Photoelectric effect is important for image contrast but not the primary production mechanism in X-ray tubes." },
+                    { text: "Bremsstrahlung (braking radiation)", impact: "✅ Correct! Bremsstrahlung occurs when electrons decelerate near the nucleus, producing a continuous X-ray spectrum." },
+                    { text: "Compton scattering", impact: "Compton scattering is an interaction with tissue, not X-ray production in the tube." }
+                ],
+                correct: 1
+            },
+            {
+                text: "How does increasing kVp affect image quality?",
+                options: [
+                    { text: "Decreases penetration", impact: "❌ Higher kVp actually increases penetration due to higher energy photons." },
+                    { text: "Increases patient dose", impact: "Higher kVp typically reduces patient dose because fewer photons are needed for adequate image quality." },
+                    { text: "Increases penetration and reduces contrast", impact: "✅ Correct! Higher energy photons penetrate better but reduce subject contrast." }
+                ],
+                correct: 2
+            }
+        ];
+        
+        // MRI Quiz Questions
+        const mriQuestions = [
+            {
+                text: "What happens when you apply an RF pulse at the Larmor frequency?",
+                options: [
+                    { text: "Protons stop moving", impact: "❌ Protons don't stop moving; they absorb energy and flip to a higher energy state." },
+                    { text: "Protons flip to higher energy state", impact: "✅ Correct! The RF pulse provides energy that flips protons from parallel to antiparallel alignment." },
+                    { text: "Magnetic field disappears", impact: "❌ The main magnetic field (B₀) remains constant; the RF pulse is an additional oscillating field." }
+                ],
+                correct: 1
+            },
+            {
+                text: "What is the Larmor equation?",
+                options: [
+                    { text: "ω = γB₀", impact: "✅ Correct! Larmor frequency (ω) equals gyromagnetic ratio (γ) times main magnetic field (B₀)." },
+                    { text: "E = mc²", impact: "❌ That's Einstein's mass-energy equivalence, not related to MRI resonance." },
+                    { text: "F = ma", impact: "❌ That's Newton's second law, not related to MRI physics." }
+                ],
+                correct: 0
+            },
+            {
+                text: "What does T1 relaxation represent?",
+                options: [
+                    { text: "Spin-spin relaxation", impact: "❌ That's T2 relaxation. T1 is spin-lattice (longitudinal) relaxation." },
+                    { text: "Spin-lattice relaxation (return to equilibrium)", impact: "✅ Correct! T1 relaxation is the recovery of longitudinal magnetization as protons release energy to surroundings." },
+                    { text: "Signal decay", impact: "❌ Signal decay is more related to T2* and T2 relaxation." }
+                ],
+                correct: 1
+            }
+        ];
+        
+        // Therapy Quiz Questions
+        const therapyQuestions = [
+            {
+                text: "What is the primary goal of radiation therapy?",
+                options: [
+                    { text: "Destroy all cells in the body", impact: "❌ That would be lethal. Therapy aims to target only cancer cells." },
+                    { text: "Maximize tumor dose, minimize healthy tissue dose", impact: "✅ Correct! The therapeutic ratio is the balance between tumor control and normal tissue complications." },
+                    { text: "Only treat surface tumors", impact: "❌ Modern techniques can treat deep-seated tumors with external beam radiation." }
+                ],
+                correct: 1
+            },
+            {
+                text: "What physical phenomenon is responsible for the 'build-up' region in photon dose distribution?",
+                options: [
+                    { text: "Electron equilibrium establishment", impact: "✅ Correct! As photons enter tissue, secondary electrons need to build up to reach charged particle equilibrium." },
+                    { text: "Compton scattering decrease", impact: "❌ Compton scattering is the dominant interaction in the MV range, not the cause of build-up." },
+                    { text: "Photon attenuation", impact: "❌ Attenuation alone would show exponential decrease, not a build-up region." }
+                ],
+                correct: 0
+            },
+            {
+                text: "What does the Bragg peak describe?",
+                options: [
+                    { text: "Maximum dose at surface", impact: "❌ That's typical for photons. Bragg peak is for protons/heavy ions." },
+                    { text: "Maximum energy deposition at a specific depth for charged particles", impact: "✅ Correct! Protons deposit most energy at the end of their range (Bragg peak), sparing distal tissue." },
+                    { text: "Minimum scatter angle", impact: "❌ Not related to Bragg peak." }
+                ],
+                correct: 1
+            }
+        ];
+        
+        // Function to render quiz with multiple questions
+        function renderQuiz(containerId, questions, quizId) {
+            const container = document.getElementById(containerId);
+            let currentQuestionIndex = 0;
+            let answersGiven = [];
+            
+            function renderCurrentQuestion() {
+                const q = questions[currentQuestionIndex];
+                let html = `
+                    <div class="quiz-question">${currentQuestionIndex + 1}. ${q.text}</div>
+                `;
+                
+                q.options.forEach((opt, idx) => {
+                    const isSelected = answersGiven[currentQuestionIndex] === idx;
+                    html += `
+                        <div class="quiz-option ${isSelected ? 'selected' : ''}" data-qidx="${currentQuestionIndex}" data-optidx="${idx}">
+                            ${String.fromCharCode(65 + idx)}. ${opt.text}
+                            <div class="quiz-impact" id="impact-${quizId}-${currentQuestionIndex}-${idx}">${opt.impact}</div>
+                        </div>
+                    `;
+                });
+                
+                if (answersGiven[currentQuestionIndex] !== undefined) {
+                    const isCorrect = answersGiven[currentQuestionIndex] === q.correct;
+                    const feedbackText = isCorrect ? "✓ Correct! " + q.options[q.correct].impact : "✗ Incorrect. " + q.options[q.correct].impact;
+                    html += `
+                        <div class="quiz-feedback ${isCorrect ? 'correct' : 'incorrect'}">
+                            ${feedbackText}
+                        </div>
+                    `;
+                }
+                
+                if (currentQuestionIndex < questions.length - 1 && answersGiven[currentQuestionIndex] !== undefined) {
+                    html += `<button class="next-question-btn" onclick="window.nextQuestion('${quizId}')">Next Question →</button>`;
+                } else if (currentQuestionIndex === questions.length - 1 && answersGiven[currentQuestionIndex] !== undefined) {
+                    const correctCount = answersGiven.filter((ans, idx) => ans === questions[idx].correct).length;
+                    html += `<div style="margin-top: 1rem; padding: 0.5rem; background: rgba(32,201,176,0.2); border-radius: 8px;">
+                        📊 Quiz Complete! You scored ${correctCount}/${questions.length} (${Math.round(correctCount/questions.length*100)}%)
+                    </div>`;
+                }
+                
+                container.innerHTML = html;
+                
+                // Add event listeners to options
+                document.querySelectorAll(`#${containerId} .quiz-option`).forEach(opt => {
+                    opt.addEventListener('click', (e) => {
+                        const qIdx = parseInt(opt.dataset.qidx);
+                        const optIdx = parseInt(opt.dataset.optidx);
+                        
+                        if (answersGiven[qIdx] === undefined) {
+                            answersGiven[qIdx] = optIdx;
+                            renderCurrentQuestion();
+                            
+                            // Show impact
+                            const impactDiv = document.getElementById(`impact-${quizId}-${qIdx}-${optIdx}`);
+                            if (impactDiv) impactDiv.classList.add('show');
+                        }
+                    });
+                    
+                    opt.addEventListener('mouseenter', (e) => {
+                        const qIdx = parseInt(opt.dataset.qidx);
+                        const optIdx = parseInt(opt.dataset.optidx);
+                        const impactDiv = document.getElementById(`impact-${quizId}-${qIdx}-${optIdx}`);
+                        if (impactDiv) impactDiv.classList.add('show');
+                    });
+                    
+                    opt.addEventListener('mouseleave', (e) => {
+                        const qIdx = parseInt(opt.dataset.qidx);
+                        const optIdx = parseInt(opt.dataset.optidx);
+                        const impactDiv = document.getElementById(`impact-${quizId}-${qIdx}-${optIdx}`);
+                        if (impactDiv && answersGiven[qIdx] !== optIdx) {
+                            impactDiv.classList.remove('show');
+                        }
+                    });
+                });
+            }
+            
+            renderCurrentQuestion();
+            
+            window.nextQuestion = function(quizId) {
+                if (quizId === 'xray') {
+                    if (currentQuestionIndex < xrayQuestions.length - 1) {
+                        currentQuestionIndex++;
+                        renderCurrentQuestion();
+                    }
+                } else if (quizId === 'mri') {
+                    if (currentQuestionIndex < mriQuestions.length - 1) {
+                        currentQuestionIndex++;
+                        renderCurrentQuestion();
+                    }
+                } else if (quizId === 'therapy') {
+                    if (currentQuestionIndex < therapyQuestions.length - 1) {
+                        currentQuestionIndex++;
+                        renderCurrentQuestion();
+                    }
+                }
+            };
+        }
+        
+        // Initialize quizzes
+        renderQuiz('xrayQuizContainer', xrayQuestions, 'xray');
+        renderQuiz('mriQuizContainer', mriQuestions, 'mri');
+        renderQuiz('therapyQuizContainer', therapyQuestions, 'therapy');
+    </script>
+</body>
+</html>
