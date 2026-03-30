@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedPhysExplorer | Applications - Medical Physics Impact</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.128.0/build/three.module.js"
+            }
+        }
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0B1E33;
+            color: #FFFFFF;
+            overflow-x: hidden;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1A2A3A;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2A7DE1;
+            border-radius: 4px;
+        }
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(11, 30, 51, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(42, 125, 225, 0.3);
+        }
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #2A7DE1, #20C9B0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        .nav-links a {
+            color: #E0E7FF;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: #2A7DE1;
+        }
+        .page-header {
+            padding: 8rem 2rem 3rem;
+            text-align: center;
+            background: linear-gradient(135deg, #0B1E33, #1A2A3A);
+        }
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #2A7DE1, #20C9B0, #8B5CF6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .body-3d-section {
+            background: rgba(37, 53, 68, 0.3);
+            border-radius: 24px;
+            padding: 2rem;
+            margin: 2rem auto;
+        }
+        .body-3d-section h2 {
+            margin-bottom: 1rem;
+        }
+        #bodyCanvas {
+            width: 100%;
+            height: 450px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 16px;
+            cursor: pointer;
+        }
+        .hotspot-info {
+            margin-top: 1rem;
+            padding: 1.5rem;
+            background: rgba(42,125,225,0.2);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+        .hotspot-info strong {
+            color: #20C9B0;
+        }
+        .physics-principle {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.95rem;
+            color: #B0C4DE;
+        }
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        .app-card {
+            background: rgba(37, 53, 68, 0.6);
+            border-radius: 20px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .app-card:hover {
+            transform: translateY(-5px);
+            border-color: #2A7DE1;
+        }
+        .app-card h3 {
+            color: #2A7DE1;
+            margin-bottom: 1rem;
+        }
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .comparison-item {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+        }
+        .progress-bar-vis {
+            width: 100%;
+            height: 10px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 5px;
+            margin: 0.5rem 0;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2A7DE1, #20C9B0);
+            width: 0%;
+            transition: width 1s ease;
+        }
+        .explanation-text {
+            font-size: 0.9rem;
+            color: #B0C4DE;
+            margin-top: 0.5rem;
+        }
+        .future-tech {
+            background: linear-gradient(135deg, #1A2A3A, #0F2A3A);
+            border-radius: 24px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        .future-tech h3 {
+            color: #20C9B0;
+            margin-bottom: 1rem;
+        }
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .tech-item {
+            background: rgba(255,255,255,0.05);
+            padding: 1rem;
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+        .tech-item:hover {
+            background: rgba(42,125,225,0.2);
+            transform: translateY(-3px);
+        }
+        .tech-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .tech-item h4 {
+            color: #2A7DE1;
+            margin-bottom: 0.5rem;
+        }
+        .tech-item p {
+            font-size: 0.85rem;
+            color: #B0C4DE;
+            line-height: 1.5;
+        }
+        .footer {
+            background: #061525;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        @media (max-width: 768px) {
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">⚛️ MedPhysExplorer</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="principles.html">Core Principles</a></li>
+                <li><a href="applications.html" class="active">Applications</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <h1>Applications & <span class="gradient-text">Impact</span></h1>
+        <p>How medical physics improves patient care and saves lives — from diagnosis to treatment</p>
+    </div>
+
+    <div class="container">
+        <!-- Interactive Body Diagram -->
+        <div class="body-3d-section">
+            <h2>🧍 Interactive Body Explorer</h2>
+            <p>Click on any highlighted organ to discover the physics behind medical imaging modalities</p>
+            <canvas id="bodyCanvas"></canvas>
+            <div class="hotspot-info" id="hotspotInfo">
+                💡 <strong>Click on a body part</strong> to learn about the imaging techniques and the physics principles that make them possible
+            </div>
+        </div>
+
+        <!-- Cancer Treatment Comparison with Explanation -->
+        <h2>🎯 Cancer Treatment Comparison</h2>
+        <div class="explanation-text" style="margin-bottom: 1rem;">
+            <strong>Why this matters:</strong> Radiation therapy is a cornerstone of cancer treatment, used in over 50% of cases. 
+            Modern techniques like IMRT and VMAT deliver precise doses that maximize tumor control while minimizing side effects. 
+            The data below shows typical outcomes for prostate cancer treatment with modern radiation therapy techniques.
+        </div>
+        <div class="cards-grid">
+            <div class="app-card">
+                <h3>📉 Before Treatment</h3>
+                <div class="comparison-item">
+                    <p><strong>Tumor Volume</strong></p>
+                    <div class="progress-bar-vis">
+                        <div class="progress-fill" style="width: 100%; background: #ef4444;"></div>
+                    </div>
+                    <p>100% (5.2 cm³) — Active cancer cells proliferating</p>
+                </div>
+                <div class="comparison-item">
+                    <p><strong>PSA Level</strong></p>
+                    <div class="progress-bar-vis">
+                        <div class="progress-fill" style="width: 85%; background: #FBBF24;"></div>
+                    </div>
+                    <p>Elevated (8.5 ng/mL) — Indicator of prostate cancer activity</p>
+                </div>
+                <div class="comparison-item">
+                    <p><strong>Symptom Severity</strong></p>
+                    <div class="progress-bar-vis">
+                        <div class="progress-fill" style="width: 80%; background: #FBBF24;"></div>
+                    </div>
+                    <p>Moderate-Severe — Urinary symptoms, discomfort</p>
+                </div>
+            </div>
+            <div class="app-card">
+                <h3>✅ After Radiation Therapy (3 months)</h3>
+                <div class="comparison-item">
+                    <p><strong>Tumor Volume</strong></p>
+                    <div class="progress-bar-vis">
+                        <div class="progress-fill" style="width: 25%; background: #4ADE80;"></div>
+                    </div>
+                    <p>25% (1.3 cm³) — Tumor cells undergoing apoptosis</p>
+                </div>
+                <div class="comparison-item">
+                    <p><strong>PSA Level</strong></p>
+                    <div class="progress-bar-vis">
+                        <div class="progress-fill" style="width: 20%; background: #4ADE80;"></div>
+                    </div>
+                    <p>Normalized (0.8 ng/mL) — Treatment response achieved</p>
+                </div>
+                <div class="comparison-item">
+                    <p><strong>Symptom Severity</strong></p>
+                    <div class="progress-bar-vis">
+                        <div class="progress-fill" style="width: 15%; background: #4ADE80;"></div>
+                    </div>
+                    <p>Minimal — Resolving side effects, improved quality of life</p>
+                </div>
+            </div>
+        </div>
+        <div class="explanation-text" style="margin: 1rem 0; padding: 1rem; background: rgba(32,201,176,0.1); border-radius: 12px;">
+            💡 <strong>The Physics of Treatment Response:</strong> Ionizing radiation creates DNA double-strand breaks in cancer cells. 
+            Unlike normal cells, cancer cells have impaired DNA repair mechanisms, making them more susceptible to radiation-induced cell death. 
+            The therapeutic ratio is optimized through precise dose delivery and fractionation (daily treatments over several weeks).
+        </div>
+
+        <!-- Dose Distribution Map -->
+        <div class="app-card">
+            <h3>📊 Dose Distribution Map</h3>
+            <p>3D visualization of radiation dose delivered to tumor vs. healthy tissue — illustrating the "therapeutic window"</p>
+            <canvas id="doseCanvas" style="width: 100%; height: 350px; background: rgba(0,0,0,0.3); border-radius: 12px;"></canvas>
+            <div class="comparison" style="margin-top: 1rem;">
+                <div class="comparison-item">
+                    <span>🎯 <strong>Tumor Dose (Prescription)</strong></span>
+                    <div class="progress-bar-vis">
+                        <div class="progress-fill" style="width: 95%; background: #2A7DE1;"></div>
+                    </div>
+                    <span>95% of prescribed dose (≥95% target coverage)</span>
+                    <div class="explanation-text">Physics: Photon interactions deposit energy via Compton scattering and pair production. The dose is prescribed to 95% isodose line covering the PTV.</div>
+                </div>
+                <div class="comparison-item">
+                    <span>❤️ <strong>Heart Sparing (OAR)</strong></span>
+                    <div class="progress-bar-vis">
+                        <div class="progress-fill" style="width: 88%; background: #20C9B0;"></div>
+                    </div>
+                    <span>88% below tolerance (V25 < 10%)</span>
+                    <div class="explanation-text">Physics: Beam shaping with MLCs and optimization algorithms minimize dose to critical structures using inverse planning.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Future Technologies with Detailed Explanations -->
+        <div class="future-tech">
+            <h3>🚀 Future of Medical Physics</h3>
+            <p>Emerging technologies that will revolutionize cancer treatment and medical imaging</p>
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <div class="tech-icon">⚛️</div>
+                    <h4>Proton Therapy</h4>
+                    <p><strong>The Physics:</strong> Protons deposit most energy at a specific depth (Bragg peak), with minimal exit dose. This allows unprecedented sparing of healthy tissue, especially in pediatric and re-irradiation cases.</p>
+                    <p><strong>Impact:</strong> Reduces secondary cancer risk by 50% compared to photon therapy.</p>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">🧬</div>
+                    <h4>FLASH Radiotherapy</h4>
+                    <p><strong>The Physics:</strong> Ultra-high dose rates (>40 Gy/s) delivered in milliseconds. The FLASH effect spares healthy tissue while maintaining tumor control — possibly due to oxygen depletion effects and immune response modulation.</p>
+                    <p><strong>Impact:</strong> Could reduce treatment time from weeks to seconds and minimize side effects.</p>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">🤖</div>
+                    <h4>AI-Assisted Treatment Planning</h4>
+                    <p><strong>The Physics:</strong> Machine learning algorithms predict optimal beam angles, fluence patterns, and dose distributions using physics-based models and prior knowledge databases.</p>
+                    <p><strong>Impact:</strong> Reduces planning time from hours to minutes while improving plan quality and consistency.</p>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">🔬</div>
+                    <h4>Theranostics</h4>
+                    <p><strong>The Physics:</strong> Using the same molecule for both imaging (diagnostic radionuclides like Ga-68) and therapy (therapeutic radionuclides like Lu-177). Leverages nuclear physics decay properties for personalized treatment.</p>
+                    <p><strong>Impact:</strong> "See what you treat, treat what you see" — truly personalized precision medicine.</p>
+                </div>
+            </div>
+            <div class="progress-bar-vis" style="margin-top: 1rem;">
+                <div class="progress-fill" style="width: 65%;"></div>
+            </div>
+            <p style="margin-top: 0.8rem;">📈 Projected adoption: 65% of cancer centers expected to incorporate advanced techniques by 2030</p>
+        </div>
+
+        <!-- Global Impact Statistics -->
+        <div class="cards-grid">
+            <div class="app-card">
+                <h3>🌍 Global Impact of Medical Physics</h3>
+                <p><strong>50%</strong> of all cancer patients receive radiation therapy</p>
+                <div class="progress-bar-vis"><div class="progress-fill" style="width: 50%; background: #2A7DE1;"></div></div>
+                <p><strong>20M+</strong> nuclear medicine procedures performed annually worldwide</p>
+                <div class="progress-bar-vis"><div class="progress-fill" style="width: 75%; background: #20C9B0;"></div></div>
+                <p><strong>100+ years</strong> of medical physics innovation saving lives</p>
+                <div class="progress-bar-vis"><div class="progress-fill" style="width: 100%; background: #8B5CF6;"></div></div>
+                <div class="explanation-text" style="margin-top: 1rem;">Medical physicists work alongside radiation oncologists, ensuring safe and effective treatment delivery for millions of patients annually.</div>
+            </div>
+            <div class="app-card">
+                <h3>📈 Treatment Outcomes Improvement</h3>
+                <p>Breast Cancer: <strong>+30% survival</strong> with adjuvant radiotherapy</p>
+                <div class="progress-bar-vis"><div class="progress-fill" style="width: 80%; background: #2A7DE1;"></div></div>
+                <p>Prostate Cancer: <strong>+25% biochemical control</strong> with IMRT vs. conventional</p>
+                <div class="progress-bar-vis"><div class="progress-fill" style="width: 75%; background: #20C9B0;"></div></div>
+                <p>Lung Cancer: <strong>+20% local control</strong> with SBRT vs. conventional RT</p>
+                <div class="progress-bar-vis"><div class="progress-fill" style="width: 70%; background: #8B5CF6;"></div></div>
+                <div class="explanation-text" style="margin-top: 1rem;">The physics of dose escalation (higher doses to tumors) combined with better targeting has directly translated to improved cure rates.</div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>⚛️ MedPhysExplorer | Transforming patient care through the power of physics</p>
+        <p style="margin-top: 0.5rem; font-size: 0.8rem;">© 2024 | Making medical physics accessible to everyone</p>
+    </footer>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'https://unpkg.com/three@0.128.0/examples/jsm/controls/OrbitControls.js';
+        
+        // Body 3D Model with Hotspots
+        const bodyCanvas = document.getElementById('bodyCanvas');
+        const bodyScene = new THREE.Scene();
+        bodyScene.background = new THREE.Color(0x0F2A3A);
+        bodyScene.fog = new THREE.FogExp2(0x0F2A3A, 0.01);
+        
+        const bodyCamera = new THREE.PerspectiveCamera(45, bodyCanvas.clientWidth / bodyCanvas.clientHeight, 0.1, 1000);
+        bodyCamera.position.set(0, 1.2, 5);
+        bodyCamera.lookAt(0, 1, 0);
+        
+        const bodyRenderer = new THREE.WebGLRenderer({ canvas: bodyCanvas, antialias: true });
+        
+        function resizeBody() {
+            const w = bodyCanvas.clientWidth;
+            const h = bodyCanvas.clientHeight;
+            bodyRenderer.setSize(w, h);
+            bodyCamera.aspect = w / h;
+            bodyCamera.updateProjectionMatrix();
+        }
+        resizeBody();
+        window.addEventListener('resize', resizeBody);
+        
+        // Controls for interactivity
+        const controls = new OrbitControls(bodyCamera, bodyCanvas);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.autoRotate = false;
+        controls.enableZoom = true;
+        controls.enablePan = true;
+        controls.target.set(0, 1, 0);
+        
+        // Create transparent human body
+        const torsoGeo = new THREE.CylinderGeometry(0.55, 0.45, 1.6, 32);
+        const torsoMat = new THREE.MeshPhongMaterial({ color: 0x6A8AAA, transparent: true, opacity: 0.35, emissive: 0x1A2A3A });
+        const torso = new THREE.Mesh(torsoGeo, torsoMat);
+        torso.position.set(0, 0.7, 0);
+        bodyScene.add(torso);
+        
+        const headGeo = new THREE.SphereGeometry(0.4, 64, 64);
+        const headMat = new THREE.MeshPhongMaterial({ color: 0x8A9ABA, transparent: true, opacity: 0.5 });
+        const head = new THREE.Mesh(headGeo, headMat);
+        head.position.set(0, 1.7, 0);
+        bodyScene.add(head);
+        
+        // Limbs
+        const armGeo = new THREE.CylinderGeometry(0.12, 0.1, 0.9, 16);
+        const armMat = new THREE.MeshPhongMaterial({ color: 0x7A9ABA, transparent: true, opacity: 0.45 });
+        const leftArm = new THREE.Mesh(armGeo, armMat);
+        leftArm.position.set(-0.7, 1.3, 0);
+        leftArm.rotation.z = 0.4;
+        leftArm.rotation.x = 0.2;
+        bodyScene.add(leftArm);
+        
+        const rightArm = new THREE.Mesh(armGeo, armMat);
+        rightArm.position.set(0.7, 1.3, 0);
+        rightArm.rotation.z = -0.4;
+        rightArm.rotation.x = -0.2;
+        bodyScene.add(rightArm);
+        
+        const legGeo = new THREE.CylinderGeometry(0.14, 0.12, 1.0, 16);
+        const legMat = new THREE.MeshPhongMaterial({ color: 0x7A9ABA, transparent: true, opacity: 0.45 });
+        const leftLeg = new THREE.Mesh(legGeo, legMat);
+        leftLeg.position.set(-0.3, -0.1, 0);
+        bodyScene.add(leftLeg);
+        
+        const rightLeg = new THREE.Mesh(legGeo, legMat);
+        rightLeg.position.set(0.3, -0.1, 0);
+        bodyScene.add(rightLeg);
+        
+        // Define hotspots with detailed physics explanations
+        const hotspots = [
+            { 
+                name: 'Brain', 
+                position: [0, 1.85, 0.35], 
+                color: 0x2A7DE1, 
+                modalities: 'MRI, PET, CT',
+                physics: '🧠 <strong>Physics Principles:</strong><br>• <strong>MRI:</strong> Nuclear magnetic resonance of hydrogen protons in water molecules. T1, T2, and diffusion-weighted imaging reveal tissue microstructure.<br>• <strong>PET:</strong> Positron annihilation detection using FDG tracer to map glucose metabolism — active neurons and tumors consume more glucose.<br>• <strong>CT:</strong> X-ray attenuation differences between gray matter, white matter, and CSF provide anatomical detail.',
+                size: 0.16
+            },
+            { 
+                name: 'Chest / Lungs', 
+                position: [0, 1.15, 0.25], 
+                color: 0x20C9B0, 
+                modalities: 'X-ray, CT, PET',
+                physics: '🫁 <strong>Physics Principles:</strong><br>• <strong>Chest X-ray:</strong> Differential attenuation — air-filled lungs appear dark (low attenuation), while bone/soft tissue appear bright.<br>• <strong>CT:</strong> Hounsfield units quantify tissue density (-1000 for air, 0 for water, +1000 for bone).<br>• <strong>PET/CT:</strong> Combined anatomical and functional imaging — tumors show increased FDG uptake (Warburg effect).',
+                size: 0.2
+            },
+            { 
+                name: 'Heart', 
+                position: [0.2, 1.05, 0.3], 
+                color: 0xef4444, 
+                modalities: 'CT, MRI, Nuclear (SPECT)',
+                physics: '❤️ <strong>Physics Principles:</strong><br>• <strong>Cardiac CT:</strong> ECG-gated imaging captures coronary arteries during diastole to minimize motion blur.<br>• <strong>Cardiac MRI:</strong> Cine imaging uses gradient echoes to visualize wall motion and calculate ejection fraction.<br>• <strong>Myocardial Perfusion SPECT:</strong> Tc-99m sestamibi tracer distribution maps blood flow — stress vs. rest comparison reveals ischemia.',
+                size: 0.14
+            },
+            { 
+                name: 'Liver', 
+                position: [0.2, 0.75, 0.25], 
+                color: 0x8B5CF6, 
+                modalities: 'CT, MRI, Ultrasound, PET',
+                physics: '🧫 <strong>Physics Principles:</strong><br>• <strong>Contrast-Enhanced CT:</strong> Iodine contrast kinetics (arterial, portal venous, delayed phases) characterize liver lesions.<br>• <strong>MRI:</strong> Hepatobiliary contrast agents (Gd-EOB-DTPA) are taken up by hepatocytes — tumors appear dark.<br>• <strong>Ultrasound:</strong> Acoustic impedance differences create B-mode images; Doppler reveals vascularity.<br>• <strong>PET:</strong> FAPI tracers target fibroblast activation protein in liver cancers.',
+                size: 0.16
+            },
+            { 
+                name: 'Prostate / Uterus', 
+                position: [0, 0.25, 0.2], 
+                color: 0xFBBF24, 
+                modalities: 'MRI, Ultrasound, PET/CT',
+                physics: '⚡ <strong>Physics Principles:</strong><br>• <strong>Multiparametric MRI (mpMRI):</strong> Combines T2-weighted anatomy, diffusion-weighted imaging (ADC maps), and dynamic contrast-enhanced (DCE) perfusion. Prostate cancers show restricted diffusion (low ADC).<br>• <strong>Transrectal Ultrasound (TRUS):</strong> Piezoelectric crystals generate sound waves; biopsy guidance uses real-time imaging.<br>• <strong>PSMA PET/CT:</strong> Ga-68 or F-18 labeled PSMA ligands bind to prostate-specific membrane antigen — highly sensitive for prostate cancer detection and staging.',
+                size: 0.14
+            }
+        ];
+        
+        const hotspotObjects = [];
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        
+        hotspots.forEach(h => {
+            const sphereGeo = new THREE.SphereGeometry(h.size, 48, 48);
+            const sphereMat = new THREE.MeshStandardMaterial({ 
+                color: h.color, 
+                emissive: h.color, 
+                emissiveIntensity: 0.4,
+                transparent: true,
+                opacity: 0.85
+            });
+            const sphere = new THREE.Mesh(sphereGeo, sphereMat);
+            sphere.position.set(h.position[0], h.position[1], h.position[2]);
+            sphere.userData = { 
+                name: h.name, 
+                modalities: h.modalities, 
+                physics: h.physics 
+            };
+            bodyScene.add(sphere);
+            hotspotObjects.push(sphere);
+        });
+        
+        // Add internal organ glows
+        const organGlowMat = new THREE.MeshBasicMaterial({ color: 0x2A7DE1, transparent: true, opacity: 0.15 });
+        
+        // Lights
+        const ambientLight = new THREE.AmbientLight(0x404060);
+        bodyScene.add(ambientLight);
+        const mainLight = new THREE.DirectionalLight(0xffffff, 1);
+        mainLight.position.set(2, 3, 4);
+        bodyScene.add(mainLight);
+        const fillLight = new THREE.PointLight(0x2A7DE1, 0.4);
+        fillLight.position.set(0, 1, 2);
+        bodyScene.add(fillLight);
+        const backLight = new THREE.PointLight(0x20C9B0, 0.3);
+        backLight.position.set(0, 1, -2);
+        bodyScene.add(backLight);
+        
+        // Animation
+        let time = 0;
+        function animateBody() {
+            requestAnimationFrame(animateBody);
+            time += 0.02;
+            
+            // Pulsing hotspots
+            hotspotObjects.forEach((obj, idx) => {
+                const pulse = 1 + Math.sin(time * 4 + idx) * 0.08;
+                obj.scale.set(pulse, pulse, pulse);
+            });
+            
+            // Subtle floating animation
+            torso.position.y = 0.7 + Math.sin(time * 0.5) * 0.002;
+            head.position.y = 1.7 + Math.sin(time * 0.5) * 0.001;
+            
+            controls.update();
+            bodyRenderer.render(bodyScene, bodyCamera);
+        }
+        animateBody();
+        
+        // Click interaction with detailed physics explanations
+        bodyCanvas.addEventListener('click', (event) => {
+            const rect = bodyCanvas.getBoundingClientRect();
+            mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+            
+            raycaster.setFromCamera(mouse, bodyCamera);
+            const intersects = raycaster.intersectObjects(hotspotObjects);
+            
+            if (intersects.length > 0) {
+                const data = intersects[0].object.userData;
+                document.getElementById('hotspotInfo').innerHTML = `
+                    <strong>📍 ${data.name}</strong><br>
+                    <strong>Imaging Modalities:</strong> ${data.modalities}<br><br>
+                    ${data.physics}
+                `;
+                document.getElementById('hotspotInfo').style.background = 'rgba(42,125,225,0.35)';
+                document.getElementById('hotspotInfo').style.borderLeft = `3px solid ${intersects[0].object.material.color.getHexString()}`;
+                
+                // Add visual feedback pulse
+                intersects[0].object.material.emissiveIntensity = 0.8;
+                setTimeout(() => {
+                    intersects[0].object.material.emissiveIntensity = 0.4;
+                    document.getElementById('hotspotInfo').style.background = 'rgba(42,125,225,0.2)';
+                }, 2000);
+            }
+        });
+        
+        // Dose Distribution 3D Visualization
+        const doseCanvas = document.getElementById('doseCanvas');
+        const doseScene = new THREE.Scene();
+        doseScene.background = new THREE.Color(0x0F2A3A);
+        const doseCamera = new THREE.PerspectiveCamera(45, doseCanvas.clientWidth / doseCanvas.clientHeight, 0.1, 1000);
+        doseCamera.position.set(3, 2.5, 5);
+        doseCamera.lookAt(0, 0.5, 0);
+        const doseRenderer = new THREE.WebGLRenderer({ canvas: doseCanvas, antialias: true });
+        
+        function resizeDose() {
+            const w = doseCanvas.clientWidth;
+            const h = doseCanvas.clientHeight;
+            doseRenderer.setSize(w, h);
+            doseCamera.aspect = w / h;
+            doseCamera.updateProjectionMatrix();
+        }
+        resizeDose();
+        window.addEventListener('resize', resizeDose);
+        
+        // Create 3D dose distribution using color-coded spheres
+        const colors = [0x2A7DE1, 0x20C9B0, 0x8B5CF6, 0xFBBF24];
+        const doseBoxes = [];
+        
+        // Create a 3D dose cloud
+        for (let x = -2; x <= 2; x += 0.5) {
+            for (let y = -0.5; y <= 2; y += 0.5) {
+                for (let z = -1.5; z <= 1.5; z += 0.5) {
+                    // Simulate dose distribution - higher dose near center (tumor location)
+                    const distanceFromCenter = Math.sqrt(x*x + (y-0.8)*(y-0.8) + z*z);
+                    const doseLevel = Math.max(0, 1 - distanceFromCenter / 2.2);
+                    if (doseLevel > 0.15) {
+                        const boxGeo = new THREE.SphereGeometry(0.22, 16, 16);
+                        const colorIdx = Math.min(Math.floor(doseLevel * 3.5), 3);
+                        const boxMat = new THREE.MeshStandardMaterial({ 
+                            color: colors[colorIdx],
+                            emissive: colors[colorIdx],
+                            emissiveIntensity: doseLevel * 0.4,
+                            transparent: true,
+                            opacity: 0.4 + doseLevel * 0.4
+                        });
+                        const box = new THREE.Mesh(boxGeo, boxMat);
+                        box.position.set(x, y, z);
+                        doseScene.add(box);
+                        doseBoxes.push(box);
+                    }
+                }
+            }
+        }
+        
+        // Add tumor representation
+        const tumorCore = new THREE.Mesh(
+            new THREE.SphereGeometry(0.65, 64, 64),
+            new THREE.MeshStandardMaterial({ color: 0xef4444, emissive: 0x440000, emissiveIntensity: 0.3 })
+        );
+        tumorCore.position.set(0, 0.8, 0);
+        doseScene.add(tumorCore);
+        
+        // Add isodose line representation (ring)
+        const isodoseRing = new THREE.Mesh(
+            new THREE.TorusGeometry(1.2, 0.05, 64, 128),
+            new THREE.MeshStandardMaterial({ color: 0x20C9B0, emissive: 0x20C9B0 })
+        );
+        isodoseRing.position.set(0, 0.8, 0);
+        isodoseRing.rotation.x = Math.PI / 2;
+        doseScene.add(isodoseRing);
+        
+        const doseLight = new THREE.AmbientLight(0x404060);
+        doseScene.add(doseLight);
+        const doseDirLight = new THREE.DirectionalLight(0xffffff, 1);
+        doseDirLight.position.set(2, 3, 2);
+        doseScene.add(doseDirLight);
+        
+        let doseTime = 0;
+        function animateDose() {
+            requestAnimationFrame(animateDose);
+            doseTime += 0.01;
+            
+            tumorCore.rotation.y += 0.01;
+            tumorCore.rotation.x += 0.005;
+            isodoseRing.rotation.z += 0.005;
+            
+            // Pulse the isodose ring
+            const pulse = 1 + Math.sin(doseTime * 3) * 0.03;
+            isodoseRing.scale.set(pulse, pulse, 1);
+            
+            doseScene.rotation.y += 0.002;
+            doseRenderer.render(doseScene, doseCamera);
+        }
+        animateDose();
+    </script>
+</body>
+</html>
