@@ -90,7 +90,7 @@
             width: 100%;
         }
 
-        /* Hero Section - Enhanced */
+        /* Hero Section */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -143,18 +143,6 @@
             margin: 1.5rem 0;
             border-radius: 8px;
         }
-        .physics-principles p {
-            color: #20C9B0;
-            font-style: italic;
-        }
-        .medical-pun {
-            background: rgba(139, 92, 246, 0.2);
-            padding: 0.8rem 1rem;
-            border-radius: 50px;
-            display: inline-block;
-            margin-top: 1rem;
-            font-size: 0.9rem;
-        }
         .btn {
             display: inline-block;
             padding: 0.8rem 2rem;
@@ -191,10 +179,9 @@
             cursor: pointer;
         }
 
-        /* Cards Section */
-        .cards-section {
+        /* Section Styles */
+        .section {
             padding: 5rem 2rem;
-            background: linear-gradient(180deg, #0B1E33, #0F2A3A);
         }
         .section-title {
             text-align: center;
@@ -206,9 +193,13 @@
             color: #B0C4DE;
             margin-bottom: 3rem;
         }
-        .cards-grid {
-            max-width: 1200px;
+        .container {
+            max-width: 1400px;
             margin: 0 auto;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
@@ -239,16 +230,253 @@
             color: #B0C4DE;
             line-height: 1.5;
         }
-        .card-features {
-            margin-top: 1rem;
-            list-style: none;
+
+        /* Founding Figures Section */
+        .figures-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
         }
-        .card-features li {
-            color: #8B5CF6;
+        .figure-card {
+            background: rgba(37, 53, 68, 0.5);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all 0.3s;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .figure-card:hover {
+            transform: translateY(-8px);
+            border-color: #2A7DE1;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+        .figure-image {
+            width: 100%;
+            height: 280px;
+            background: linear-gradient(135deg, #1A2A3A, #0F2A3A);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .figure-avatar {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2A7DE1, #20C9B0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            border: 4px solid rgba(255,255,255,0.3);
+            transition: all 0.3s;
+        }
+        .figure-card:hover .figure-avatar {
+            transform: scale(1.05);
+            border-color: #20C9B0;
+        }
+        .figure-info {
+            padding: 1.5rem;
+        }
+        .figure-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.3rem;
+            color: #2A7DE1;
+        }
+        .figure-title {
+            color: #20C9B0;
             font-size: 0.9rem;
-            margin: 0.5rem 0;
+            margin-bottom: 1rem;
+        }
+        .figure-info p {
+            color: #B0C4DE;
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+        .figure-contribution {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.85rem;
+            color: #8B5CF6;
         }
 
+        /* Puns Carousel Section - FIXED */
+        .puns-section {
+            background: linear-gradient(135deg, #0F2A3A, #0B1E33);
+        }
+        .puns-carousel {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        .puns-wrapper {
+            overflow: hidden;
+            border-radius: 24px;
+        }
+        .puns-container {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .pun-card {
+            flex: 0 0 100%;
+            padding: 2.5rem;
+            background: rgba(42,125,225,0.15);
+            text-align: center;
+            border: 1px solid rgba(42,125,225,0.3);
+            backdrop-filter: blur(10px);
+        }
+        .pun-emoji {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+        }
+        .pun-question {
+            font-size: 1.4rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            color: #E0E7FF;
+        }
+        .pun-answer {
+            font-size: 1.3rem;
+            color: #20C9B0;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+            font-weight: 500;
+        }
+        .pun-explanation {
+            color: #8B5CF6;
+            font-size: 0.95rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(42,125,225,0.7);
+            border: none;
+            color: white;
+            font-size: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .carousel-btn:hover {
+            background: rgba(42,125,225,1);
+            transform: translateY(-50%) scale(1.1);
+        }
+        .carousel-prev {
+            left: -25px;
+        }
+        .carousel-next {
+            right: -25px;
+        }
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 2rem;
+        }
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .dot:hover {
+            background: rgba(42,125,225,0.7);
+            transform: scale(1.2);
+        }
+        .dot.active {
+            background: #2A7DE1;
+            width: 30px;
+            border-radius: 6px;
+        }
+
+        /* Medical Physics Timeline Section */
+        .timeline-section {
+            background: rgba(37, 53, 68, 0.2);
+        }
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(180deg, #2A7DE1, #20C9B0, #8B5CF6);
+        }
+        .timeline-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        .timeline-item:nth-child(odd) {
+            flex-direction: row;
+        }
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+        .timeline-content {
+            width: 45%;
+            background: rgba(37, 53, 68, 0.6);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid rgba(42,125,225,0.3);
+            transition: all 0.3s;
+        }
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            border-color: #20C9B0;
+        }
+        .timeline-year {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2A7DE1;
+            margin-bottom: 0.5rem;
+        }
+        .timeline-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #20C9B0;
+        }
+        .timeline-desc {
+            color: #B0C4DE;
+            line-height: 1.5;
+        }
+        .timeline-icon {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #2A7DE1, #20C9B0);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            z-index: 1;
+        }
+
+        /* Footer */
         .footer {
             background: #061525;
             padding: 3rem 2rem;
@@ -278,7 +506,7 @@
             50% { transform: translateX(-50%) translateY(10px); }
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
             .hero-content {
                 grid-template-columns: 1fr;
                 text-align: center;
@@ -286,6 +514,25 @@
             .hero-text h1 {
                 font-size: 2.5rem;
             }
+            .timeline::before {
+                left: 30px;
+            }
+            .timeline-item {
+                flex-direction: column !important;
+                margin-left: 60px;
+            }
+            .timeline-content {
+                width: 100%;
+            }
+            .timeline-icon {
+                left: 0;
+                transform: translateX(0);
+            }
+            .carousel-prev, .carousel-next {
+                display: none;
+            }
+        }
+        @media (max-width: 768px) {
             .nav-links {
                 display: none;
             }
@@ -310,15 +557,9 @@
                 <span class="hero-tagline">🔬 Demystifying the Physics of Medicine</span>
                 <h1>Where <span class="gradient-text">Physics</span> Meets<br>Medicine</h1>
                 <p class="hero-description">Explore the fascinating world of medical physics through interactive 3D visualizations. From X-rays to proton therapy, understand how physics saves lives.</p>
-                
                 <div class="physics-principles">
-                    <p>⚛️ <strong>How Physics Powers Medicine:</strong> From Einstein's photoelectric effect enabling X-ray imaging to quantum mechanics driving MRI contrast, every medical technology rests on fundamental physics principles. The electromagnetic spectrum gives us diagnostic vision, while nuclear physics provides therapeutic power to fight cancer.</p>
+                    <p>⚛️ <strong>How Physics Powers Medicine:</strong> From Einstein's photoelectric effect enabling X-ray imaging to quantum mechanics driving MRI contrast, every medical technology rests on fundamental physics principles.</p>
                 </div>
-                
-                <div class="medical-pun">
-                    🎵 <strong>Medical Physics Pun:</strong> Why did the medical physicist break up with the X-ray tube? <em>"There was just no spark anymore... and the relationship was becoming too scattered!"</em>
-                </div>
-                
                 <div style="margin-top: 2rem;">
                     <a href="principles.html" class="btn btn-primary">Explore Principles</a>
                     <a href="applications.html" class="btn btn-outline">See Applications</a>
@@ -329,52 +570,282 @@
                 <p style="text-align: center; margin-top: 0.5rem; font-size: 0.8rem; color: #8B5CF6;">✨ Click and drag to rotate the atom | Scroll to zoom</p>
             </div>
         </div>
-        <div class="scroll-indicator">↓ Scroll to explore key areas</div>
+        <div class="scroll-indicator">↓ Scroll to explore</div>
     </section>
 
-    <section class="cards-section">
-        <h2 class="section-title">Key Areas of <span class="gradient-text">Medical Physics</span></h2>
-        <p class="section-subtitle">Explore the fundamental pillars of medical physics through interactive visualizations</p>
-        <div class="cards-grid">
-            <div class="card" onclick="location.href='principles.html#xray'">
-                <div class="card-icon">🔍</div>
-                <h3>Diagnostic Imaging</h3>
-                <p>X-ray, CT, MRI, Ultrasound - see inside the human body without cutting it open</p>
-                <ul class="card-features">
-                    <li>✓ X-ray attenuation (Beer-Lambert Law)</li>
-                    <li>✓ MRI nuclear magnetic resonance</li>
-                    <li>✓ Ultrasound piezoelectric effect</li>
-                </ul>
+    <!-- Key Areas Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Key Areas of <span class="gradient-text">Medical Physics</span></h2>
+            <p class="section-subtitle">Explore the fundamental pillars of medical physics through interactive visualizations</p>
+            <div class="cards-grid">
+                <div class="card" onclick="location.href='principles.html#xray'">
+                    <div class="card-icon">🔍</div>
+                    <h3>Diagnostic Imaging</h3>
+                    <p>X-ray, CT, MRI, Ultrasound - see inside the human body without cutting it open</p>
+                </div>
+                <div class="card" onclick="location.href='principles.html#therapy'">
+                    <div class="card-icon">☢️</div>
+                    <h3>Radiation Therapy</h3>
+                    <p>Treating cancer with high-energy radiation - over 50% of patients receive it</p>
+                </div>
+                <div class="card" onclick="location.href='principles.html#nuclear'">
+                    <div class="card-icon">🧪</div>
+                    <h3>Nuclear Medicine</h3>
+                    <p>Radioactive tracers that reveal molecular function</p>
+                </div>
+                <div class="card" onclick="location.href='applications.html'">
+                    <div class="card-icon">🛡️</div>
+                    <h3>Radiation Safety</h3>
+                    <p>Protecting patients and professionals with ALARA principle</p>
+                </div>
             </div>
-            <div class="card" onclick="location.href='principles.html#therapy'">
-                <div class="card-icon">☢️</div>
-                <h3>Radiation Therapy</h3>
-                <p>Treating cancer with high-energy radiation - over 50% of patients receive it</p>
-                <ul class="card-features">
-                    <li>✓ Linear accelerator physics</li>
-                    <li>✓ Dose deposition (Bragg peak)</li>
-                    <li>✓ Radiobiological effect</li>
-                </ul>
+        </div>
+    </section>
+
+    <!-- Section 1: Founding Mothers and Fathers of Medical Physics -->
+    <section class="section" style="background: rgba(32, 201, 176, 0.05);">
+        <div class="container">
+            <h2 class="section-title">👥 Founding <span class="gradient-text">Mothers & Fathers</span> of Medical Physics</h2>
+            <p class="section-subtitle">The brilliant minds whose discoveries laid the foundation for modern medical physics</p>
+            <div class="figures-grid">
+                <!-- Wilhelm Röntgen -->
+                <div class="figure-card">
+                    <div class="figure-image">
+                        <div class="figure-avatar">🫧</div>
+                    </div>
+                    <div class="figure-info">
+                        <h3>Wilhelm Röntgen</h3>
+                        <div class="figure-title">1845-1923 | Germany</div>
+                        <p>Discovered X-rays on November 8, 1895, while experimenting with cathode rays. He called them "X-rays" to denote their unknown nature. His discovery revolutionized medical diagnosis and earned him the first Nobel Prize in Physics in 1901.</p>
+                        <div class="figure-contribution">
+                            <strong>🏆 Key Contribution:</strong> Discovery of X-rays • First medical radiograph • Nobel Prize in Physics 1901
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Marie Curie -->
+                <div class="figure-card">
+                    <div class="figure-image">
+                        <div class="figure-avatar">🧪</div>
+                    </div>
+                    <div class="figure-info">
+                        <h3>Marie Skłodowska Curie</h3>
+                        <div class="figure-title">1867-1934 | Poland/France</div>
+                        <p>The first woman to win a Nobel Prize and the only person to win Nobel Prizes in two scientific fields. Her discovery of radium and polonium laid the foundation for radiation therapy and nuclear medicine.</p>
+                        <div class="figure-contribution">
+                            <strong>🏆 Key Contribution:</strong> Discovery of radium and polonium • Pioneered radiation therapy • Nobel Prize in Physics (1903) & Chemistry (1911)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Henri Becquerel -->
+                <div class="figure-card">
+                    <div class="figure-image">
+                        <div class="figure-avatar">⚛️</div>
+                    </div>
+                    <div class="figure-info">
+                        <h3>Henri Becquerel</h3>
+                        <div class="figure-title">1852-1908 | France</div>
+                        <p>Discovered radioactivity in 1896 while investigating phosphorescence in uranium salts. His discovery opened the door to nuclear medicine and our understanding of radioactive decay.</p>
+                        <div class="figure-contribution">
+                            <strong>🏆 Key Contribution:</strong> Discovery of radioactivity • Nobel Prize in Physics (1903, shared with Curies)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Godfrey Hounsfield & Allan Cormack -->
+                <div class="figure-card">
+                    <div class="figure-image">
+                        <div class="figure-avatar">📊</div>
+                    </div>
+                    <div class="figure-info">
+                        <h3>Hounsfield & Cormack</h3>
+                        <div class="figure-title">Godfrey Hounsfield (1919-2004) | Allan Cormack (1924-1998)</div>
+                        <p>Independently developed the mathematical foundations and practical implementation of computed tomography (CT), revolutionizing diagnostic imaging by creating 3D images of the body from X-ray projections.</p>
+                        <div class="figure-contribution">
+                            <strong>🏆 Key Contribution:</strong> Development of CT scanning • Nobel Prize in Medicine (1979)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Paul Lauterbur & Peter Mansfield -->
+                <div class="figure-card">
+                    <div class="figure-image">
+                        <div class="figure-avatar">🧲</div>
+                    </div>
+                    <div class="figure-info">
+                        <h3>Lauterbur & Mansfield</h3>
+                        <div class="figure-title">Paul Lauterbur (1929-2007) | Peter Mansfield (1933-2017)</div>
+                        <p>Pioneered the development of magnetic resonance imaging (MRI), transforming diagnostic medicine by enabling non-invasive visualization of soft tissues with exceptional detail.</p>
+                        <div class="figure-contribution">
+                            <strong>🏆 Key Contribution:</strong> Development of MRI • Nobel Prize in Medicine (2003)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- William Coolidge -->
+                <div class="figure-card">
+                    <div class="figure-image">
+                        <div class="figure-avatar">🔬</div>
+                    </div>
+                    <div class="figure-info">
+                        <h3>William Coolidge</h3>
+                        <div class="figure-title">1873-1975 | USA</div>
+                        <p>Invented the Coolidge tube (modern X-ray tube) in 1913, which allowed for stable, controllable X-ray production. This invention made X-ray technology practical and safe for widespread medical use.</p>
+                        <div class="figure-contribution">
+                            <strong>🏆 Key Contribution:</strong> Coolidge X-ray tube • Modern X-ray technology • Improved radiation safety
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="card" onclick="location.href='principles.html#nuclear'">
-                <div class="card-icon">🧪</div>
-                <h3>Nuclear Medicine</h3>
-                <p>Radioactive tracers that reveal molecular function</p>
-                <ul class="card-features">
-                    <li>✓ PET: Positron annihilation</li>
-                    <li>✓ SPECT: Gamma camera physics</li>
-                    <li>✓ Radionuclide decay</li>
-                </ul>
+        </div>
+    </section>
+
+    <!-- Section 2: Medical Physics Puns (Carousel) - FIXED WORKING VERSION -->
+    <section class="section puns-section">
+        <div class="container">
+            <h2 class="section-title">😂 Medical Physics <span class="gradient-text">Puns</span></h2>
+            <p class="section-subtitle">Because even physicists need a laugh (and it helps with remembering concepts!)</p>
+            
+            <div class="puns-carousel">
+                <button class="carousel-btn carousel-prev" id="prevPun">‹</button>
+                <div class="puns-wrapper">
+                    <div class="puns-container" id="punsContainer">
+                        <div class="pun-card">
+                            <div class="pun-emoji">⚛️</div>
+                            <div class="pun-question">Why did the medical physicist break up with the X-ray tube?</div>
+                            <div class="pun-answer">"There was just no spark anymore... and the relationship was becoming too scattered!"</div>
+                            <div class="pun-explanation">💡 The pun plays on electron emission (spark) and scatter radiation in X-ray production!</div>
+                        </div>
+                        <div class="pun-card">
+                            <div class="pun-emoji">🧲</div>
+                            <div class="pun-question">What did the MRI technologist say to the impatient patient?</div>
+                            <div class="pun-answer">"Stop being so spin-polarized! Your relaxation time is causing T1 issues!"</div>
+                            <div class="pun-explanation">💡 T1 relaxation time is how long protons take to realign with the magnetic field after an RF pulse!</div>
+                        </div>
+                        <div class="pun-card">
+                            <div class="pun-emoji">☢️</div>
+                            <div class="pun-question">What's a medical physicist's favorite type of music?</div>
+                            <div class="pun-answer">"Heavy metal — especially when it's shielding patients from radiation!"</div>
+                            <div class="pun-explanation">💡 Heavy metals like lead are used for radiation shielding in X-ray rooms!</div>
+                        </div>
+                        <div class="pun-card">
+                            <div class="pun-emoji">🔊</div>
+                            <div class="pun-question">Why did the ultrasound tech get invited to all the parties?</div>
+                            <div class="pun-answer">"Because they always knew how to create the best echoes and reflections!"</div>
+                            <div class="pun-explanation">💡 Ultrasound imaging relies on sound wave echoes (reflections) to create images!</div>
+                        </div>
+                        <div class="pun-card">
+                            <div class="pun-emoji">🧠</div>
+                            <div class="pun-question">What did the proton say to the MRI magnet?</div>
+                            <div class="pun-answer">"You're so attractive — you've got me spinning in circles at Larmor frequency!"</div>
+                            <div class="pun-explanation">💡 Larmor frequency is the precession frequency of protons in a magnetic field!</div>
+                        </div>
+                        <div class="pun-card">
+                            <div class="pun-emoji">🎯</div>
+                            <div class="pun-question">Why are radiation therapists so good at darts?</div>
+                            <div class="pun-answer">"They've mastered the Bragg peak — hitting the bullseye with pinpoint accuracy!"</div>
+                            <div class="pun-explanation">💡 The Bragg peak describes where charged particles deposit most energy at a specific depth!</div>
+                        </div>
+                        <div class="pun-card">
+                            <div class="pun-emoji">🔬</div>
+                            <div class="pun-question">What did the physicist say when the CT scanner broke?</div>
+                            <div class="pun-answer">"Don't worry, we'll reconstruct the situation from a different angle!"</div>
+                            <div class="pun-explanation">💡 CT reconstruction uses projections from multiple angles to create 3D images!</div>
+                        </div>
+                        <div class="pun-card">
+                            <div class="pun-emoji">⚡</div>
+                            <div class="pun-question">How do medical physicists stay warm in winter?</div>
+                            <div class="pun-answer">"They stand by the linear accelerator — it's always radiating heat!"</div>
+                            <div class="pun-explanation">💡 Linear accelerators (LINACs) produce radiation for cancer treatment and generate heat!</div>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-btn carousel-next" id="nextPun">›</button>
+                <div class="carousel-dots" id="punDots"></div>
             </div>
-            <div class="card" onclick="location.href='applications.html'">
-                <div class="card-icon">🛡️</div>
-                <h3>Radiation Safety</h3>
-                <p>Protecting patients and professionals with ALARA principle</p>
-                <ul class="card-features">
-                    <li>✓ Inverse square law shielding</li>
-                    <li>✓ Dose limits and monitoring</li>
-                    <li>✓ Radiation protection physics</li>
-                </ul>
+        </div>
+    </section>
+
+    <!-- Section 3: Medical Physics Timeline - Breakthrough Moments -->
+    <section class="section timeline-section">
+        <div class="container">
+            <h2 class="section-title">⏰ Medical Physics <span class="gradient-text">Timeline</span></h2>
+            <p class="section-subtitle">Key breakthroughs that shaped modern medicine</p>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-icon">🫧</div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">1895</div>
+                        <div class="timeline-title">X-rays Discovered</div>
+                        <div class="timeline-desc">Wilhelm Röntgen discovers X-rays, producing the first medical radiograph of his wife's hand. This marks the birth of diagnostic medical physics.</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-icon">🧪</div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">1896</div>
+                        <div class="timeline-title">Radioactivity Discovered</div>
+                        <div class="timeline-desc">Henri Becquerel discovers radioactivity; Marie and Pierre Curie later isolate radium, laying foundation for nuclear medicine and radiation therapy.</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-icon">🔬</div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">1913</div>
+                        <div class="timeline-title">Coolidge X-ray Tube</div>
+                        <div class="timeline-desc">William Coolidge invents the modern X-ray tube with a heated cathode, enabling stable, controllable X-ray production for medical use.</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-icon">☢️</div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">1950s</div>
+                        <div class="timeline-title">Cobalt-60 Teletherapy</div>
+                        <div class="timeline-desc">Cobalt-60 units become the first widely used external beam radiation therapy machines, revolutionizing cancer treatment.</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-icon">📊</div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">1972</div>
+                        <div class="timeline-title">CT Scanner Invented</div>
+                        <div class="timeline-desc">Godfrey Hounsfield builds the first clinical CT scanner, combining X-rays with computer reconstruction to create 3D images of the body.</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-icon">🧲</div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">1977</div>
+                        <div class="timeline-title">First Human MRI Scan</div>
+                        <div class="timeline-desc">Paul Lauterbur and Peter Mansfield create the first human MRI images, enabling non-invasive visualization of soft tissues.</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-icon">🎯</div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">1990s</div>
+                        <div class="timeline-title">IMRT & 3D Conformal RT</div>
+                        <div class="timeline-desc">Intensity Modulated Radiation Therapy (IMRT) emerges, allowing precise dose shaping to tumors while sparing healthy tissue.</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-icon">⚛️</div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">2000s-Present</div>
+                        <div class="timeline-title">Proton Therapy & AI</div>
+                        <div class="timeline-desc">Proton therapy centers expand globally; AI and machine learning revolutionize treatment planning and image analysis.</div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -382,6 +853,7 @@
     <footer class="footer">
         <p>⚛️ MedPhysExplorer | Making medical physics accessible to everyone</p>
         <p style="margin-top: 1rem; font-size: 0.8rem;">© 2024 | Created with ❤️ for medical physics education</p>
+        <p style="margin-top: 0.5rem; font-size: 0.7rem;">"The most beautiful thing we can experience is the mysterious. It is the source of all true art and science." - Albert Einstein</p>
     </footer>
 
     <script type="module">
@@ -453,7 +925,7 @@
         const atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
         scene.add(atmosphere);
 
-        // Electron Orbits with Trails
+        // Electron Orbits
         const orbits = [
             { radius: 2.0, speed: 0.012, color: 0x2A7DE1, electrons: 3 },
             { radius: 2.6, speed: 0.009, color: 0x20C9B0, electrons: 4 },
@@ -462,7 +934,6 @@
         ];
 
         const electrons = [];
-        const electronTrails = [];
 
         orbits.forEach((orbit, orbitIdx) => {
             // Draw orbit ring
@@ -491,85 +962,39 @@
                 const electron = new THREE.Mesh(electronGeo, electronMat);
                 scene.add(electron);
                 
-                // Add trail effect
-                const trailPoints = [];
-                for (let i = 0; i < 20; i++) {
-                    trailPoints.push(new THREE.Vector3(0, 0, 0));
-                }
-                const trailGeo = new THREE.BufferGeometry().setFromPoints(trailPoints);
-                const trailMat = new THREE.LineBasicMaterial({ color: orbit.color, transparent: true, opacity: 0.3 });
-                const trail = new THREE.Line(trailGeo, trailMat);
-                scene.add(trail);
-                
                 electrons.push({
                     mesh: electron,
-                    trail: trail,
-                    trailPositions: [],
                     radius: orbit.radius,
                     speed: orbit.speed,
-                    angle: (Math.PI * 2 / orbit.electrons) * e,
-                    color: orbit.color
+                    angle: (Math.PI * 2 / orbit.electrons) * e
                 });
             }
         });
 
-        // Enhanced Particle System (Nebula Effect)
+        // Particle System
         const particleCount = 1500;
         const particlesGeometry = new THREE.BufferGeometry();
         const particlePositions = new Float32Array(particleCount * 3);
-        const particleColors = new Float32Array(particleCount * 3);
         
         for (let i = 0; i < particleCount; i++) {
-            // Spherical distribution
             const radius = 4 + Math.random() * 3;
             const theta = Math.random() * Math.PI * 2;
             const phi = Math.acos(2 * Math.random() - 1);
             particlePositions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
             particlePositions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta) * 0.5;
             particlePositions[i * 3 + 2] = radius * Math.cos(phi);
-            
-            // Colors based on position
-            const colorChoice = Math.random();
-            if (colorChoice < 0.33) {
-                particleColors[i * 3] = 0.16; // 2A7DE1
-                particleColors[i * 3 + 1] = 0.49;
-                particleColors[i * 3 + 2] = 0.88;
-            } else if (colorChoice < 0.66) {
-                particleColors[i * 3] = 0.13; // 20C9B0
-                particleColors[i * 3 + 1] = 0.79;
-                particleColors[i * 3 + 2] = 0.69;
-            } else {
-                particleColors[i * 3] = 0.55; // 8B5CF6
-                particleColors[i * 3 + 1] = 0.36;
-                particleColors[i * 3 + 2] = 0.96;
-            }
         }
         particlesGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
-        particlesGeometry.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
         
         const particlesMaterial = new THREE.PointsMaterial({ 
             size: 0.05, 
-            vertexColors: true,
+            color: 0x2A7DE1,
             transparent: true, 
             opacity: 0.4,
             blending: THREE.AdditiveBlending
         });
         const particles = new THREE.Points(particlesGeometry, particlesMaterial);
         scene.add(particles);
-
-        // Add floating particles around nucleus
-        const floatingParticleCount = 800;
-        const floatingGeo = new THREE.BufferGeometry();
-        const floatingPositions = new Float32Array(floatingParticleCount * 3);
-        for (let i = 0; i < floatingParticleCount; i++) {
-            floatingPositions[i * 3] = (Math.random() - 0.5) * 6;
-            floatingPositions[i * 3 + 1] = (Math.random() - 0.5) * 4;
-            floatingPositions[i * 3 + 2] = (Math.random() - 0.5) * 6;
-        }
-        floatingGeo.setAttribute('position', new THREE.BufferAttribute(floatingPositions, 3));
-        const floatingMat = new THREE.PointsMaterial({ color: 0x2A7DE1, size: 0.02, transparent: true, opacity: 0.3 });
-        const floatingParticles = new THREE.Points(floatingGeo, floatingMat);
-        scene.add(floatingParticles);
 
         // Lights
         const ambientLight = new THREE.AmbientLight(0x404060);
@@ -586,16 +1011,9 @@
         const fillLight = new THREE.PointLight(0x20C9B0, 0.5);
         fillLight.position.set(1, 2, 2);
         scene.add(fillLight);
-        
-        const rimLight = new THREE.PointLight(0x8B5CF6, 0.6);
-        rimLight.position.set(1, 1, -2);
-        scene.add(rimLight);
 
-        // Animation variables
+        // Animation
         let time = 0;
-        let trailIndex = 0;
-        const trailLength = 30;
-
         function animate() {
             requestAnimationFrame(animate);
             time += 0.016;
@@ -605,27 +1023,14 @@
             nucleus.rotation.x += 0.005;
             coreGlow.rotation.y += 0.005;
             atmosphere.rotation.y += 0.003;
-            atmosphere.rotation.x += 0.002;
 
-            // Animate electrons with trail effects
+            // Move electrons
             electrons.forEach(electron => {
                 electron.angle += electron.speed;
                 const x = Math.cos(electron.angle) * electron.radius;
                 const z = Math.sin(electron.angle) * electron.radius;
                 const y = Math.sin(electron.angle * 2) * 0.15;
                 electron.mesh.position.set(x, y, z);
-                
-                // Update trail
-                if (!electron.trailPositions) electron.trailPositions = [];
-                electron.trailPositions.unshift({ x, y, z });
-                if (electron.trailPositions.length > trailLength) electron.trailPositions.pop();
-                
-                const trailPoints = electron.trailPositions.map(p => new THREE.Vector3(p.x, p.y, p.z));
-                if (trailPoints.length > 1) {
-                    const trailGeo = new THREE.BufferGeometry().setFromPoints(trailPoints);
-                    electron.trail.geometry.dispose();
-                    electron.trail.geometry = trailGeo;
-                }
                 
                 // Pulse effect
                 const pulse = 0.8 + Math.sin(time * 15 + electron.angle) * 0.2;
@@ -635,16 +1040,79 @@
             // Rotate particle systems
             particles.rotation.y += 0.0005;
             particles.rotation.x += 0.0003;
-            floatingParticles.rotation.y += 0.001;
-            floatingParticles.rotation.x += 0.0005;
 
-            // Update controls
             controls.update();
-
             renderer.render(scene, camera);
         }
         
         animate();
+
+        // ========== PUNS CAROUSEL - WORKING VERSION ==========
+        const punsContainer = document.getElementById('punsContainer');
+        const prevBtn = document.getElementById('prevPun');
+        const nextBtn = document.getElementById('nextPun');
+        const dotsContainer = document.getElementById('punDots');
+        
+        if (punsContainer && prevBtn && nextBtn && dotsContainer) {
+            const punCards = punsContainer.children;
+            const totalPuns = punCards.length;
+            let currentIndex = 0;
+            
+            // Clear and create dots
+            dotsContainer.innerHTML = '';
+            for (let i = 0; i < totalPuns; i++) {
+                const dot = document.createElement('div');
+                dot.classList.add('dot');
+                if (i === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => goToPun(i));
+                dotsContainer.appendChild(dot);
+            }
+            
+            function updateCarousel() {
+                const offset = -currentIndex * 100;
+                punsContainer.style.transform = `translateX(${offset}%)`;
+                
+                // Update dots
+                const dots = dotsContainer.querySelectorAll('.dot');
+                dots.forEach((dot, i) => {
+                    if (i === currentIndex) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            }
+            
+            function goToPun(index) {
+                currentIndex = index;
+                updateCarousel();
+            }
+            
+            function nextPun() {
+                currentIndex = (currentIndex + 1) % totalPuns;
+                updateCarousel();
+            }
+            
+            function prevPun() {
+                currentIndex = (currentIndex - 1 + totalPuns) % totalPuns;
+                updateCarousel();
+            }
+            
+            nextBtn.addEventListener('click', nextPun);
+            prevBtn.addEventListener('click', prevPun);
+            
+            // Auto-rotate every 8 seconds
+            let autoRotate = setInterval(nextPun, 8000);
+            
+            // Pause auto-rotate on hover
+            const carousel = document.querySelector('.puns-carousel');
+            if (carousel) {
+                carousel.addEventListener('mouseenter', () => clearInterval(autoRotate));
+                carousel.addEventListener('mouseleave', () => {
+                    autoRotate = setInterval(nextPun, 8000);
+                });
+            }
+        }
 
         // Scroll Animation for Cards
         const observer = new IntersectionObserver((entries) => {
@@ -655,9 +1123,9 @@
             });
         }, { threshold: 0.1 });
 
-        document.querySelectorAll('.card').forEach(card => {
-            card.style.opacity = '0';
-            observer.observe(card);
+        document.querySelectorAll('.card, .figure-card, .timeline-content').forEach(el => {
+            el.style.opacity = '0';
+            observer.observe(el);
         });
     </script>
 </body>
